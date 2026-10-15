@@ -1,7 +1,62 @@
-{
-  id: 1,
-  nombre: "Kombucha de fresa",
-  precio: 12.000
-  descripcion: "Deliciosa kombucha de fresa, prodiedad calmante 200ml",
-  imagen: "./assets/img/kombucha-fresa.jpg"
-}
+[
+  {
+    "id": "1",
+    "nombre": "Kombucha de limón y jengibre",
+    "categoria": "Kombucha",
+    "descripcion": "Bebida fermentada, cítrica y refrescante.",
+    "precio": 12000,
+    "moneda": "COP",
+    "imagen": "",
+    "destacado": true
+  },
+  {
+    "id": "2",
+    "nombre": "Kombucha de frutos rojos",
+    "categoria": "Kombucha",
+    "descripcion": "Una combinación frutal con un toque ácido.",
+    "precio": 12000,
+    "moneda": "COP",
+    "imagen": "",
+    "destacado": true
+  },
+  {
+    "id": "3",
+    "nombre": "Kombucha de piña",
+    "categoria": "Kombucha",
+    "descripcion": "Perfil tropical, fresco y afrutado.",
+    "precio": 12000,
+    "moneda": "COP",
+    "imagen": "",
+    "destacado": true
+  },
+  {
+    "id": "4",
+    "nombre": "Kéfir natural",
+    "categoria": "Kéfir",
+    "descripcion": "Bebida fermentada de sabor suave y cremoso.",
+    "precio": 10000,
+    "moneda": "COP",
+    "imagen": "",
+    "destacado": false
+  },
+  {
+    "id": "5",
+    "nombre": "Kéfir de fresa",
+    "categoria": "Kéfir",
+    "descripcion": "Una versión frutal con sabor a fresa.",
+    "precio": 11000,
+    "moneda": "COP",
+    "imagen": "",
+    "destacado": false
+  },
+  {
+    "id": "6",
+    "nombre": "Kéfir de frutos rojos",
+    "categoria": "Kéfir",
+    "descripcion": "Alternativa frutal para ampliar el catálogo.",
+    "precio": 11000,
+    "moneda": "COP",
+    "imagen": "",
+    "destacado": false
+  }
+]

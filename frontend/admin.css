@@ -63,7 +63,9 @@ footer a { color: #fff; }
 .formulario-producto { margin: 16px 0 22px; padding: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; border-radius: 9px; background: var(--light); }
 .formulario-producto > label { display: grid; gap: 7px; color: var(--texto-oscuro); font-size: 12px; font-weight: 700; }
 .formulario-producto > label span { color: var(--texto-secundario); font-weight: 400; }
-.formulario-producto input:not([type="checkbox"]):not([type="hidden"]), .formulario-producto select { width: 100%; min-height: 40px; padding: 9px 11px; border: 1px solid var(--borde); border-radius: 5px; background: #fff; }
+.formulario-producto input:not([type="checkbox"]):not([type="hidden"]), .formulario-producto select, .formulario-producto textarea { width: 100%; min-height: 40px; padding: 9px 11px; border: 1px solid var(--borde); border-radius: 5px; background: #fff; font: inherit; }
+.formulario-producto textarea { resize: vertical; }
+.formulario-producto .campo-descripcion { grid-column: 1 / -1; }
 .formulario-producto .casilla-destacado { display: flex; align-items: center; gap: 8px; }
 .acciones-formulario { display: flex; align-items: center; gap: 9px; }
 .formulario-producto .nota { grid-column: 1 / -1; margin: 0; }
@@ -134,7 +136,7 @@ table { min-width: 500px; }
   .titulo-seccion { align-items: flex-start; flex-direction: column; }
   .titulo-seccion > .boton-secundario { width: 100%; }
   .formulario-producto { grid-template-columns: minmax(0, 1fr); padding: 13px; }
-  .formulario-producto .nota { grid-column: auto; }
+  .formulario-producto .nota, .formulario-producto .campo-descripcion { grid-column: auto; }
   .acciones-formulario { flex-wrap: wrap; }
   .acciones-formulario > button { flex: 1 1 145px; }
   .encabezado-solicitud { flex-wrap: wrap; }

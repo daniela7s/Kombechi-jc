@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Administración | Tienda Banyito</title>
+  <title>Administración | Kombechi</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -17,7 +17,7 @@
 
 <body>
   <header>
-    <span class="logo fuente-logo">Tienda Banyito</span>
+    <span class="logo fuente-logo">Kombechi</span>
     <nav class="enlaces-navegacion"><a href="./index.html">← Volver a la tienda</a></nav>
     <span class="etiqueta-admin">Admin</span>
   </header>
@@ -38,7 +38,7 @@
       </form>
       <p class="credenciales-demo">Acceso de demostración: <strong>admin@tienda.com</strong> / <strong>admin123</strong>
       </p>
-      <p id="estado-acceso" class="nota" role="status">Este acceso es una simulación local. No protege datos reales.</p>
+      <p id="estado-acceso" class="nota" role="status">Acceso de demostración: admin@tienda.com / admin123. La gestión se guarda en este navegador.</p>
     </section>
 
     <section class="panel-admin" id="panel-admin" hidden aria-labelledby="titulo-panel">
@@ -64,8 +64,8 @@
             </div>
           </section>
           <div class="cuadricula-resumen">
-            <article class="tarjeta-resumen"><span>Productos</span><strong id="contador-productos">12</strong></article>
-            <article class="tarjeta-resumen"><span>Categorías</span><strong id="contador-categorias">3</strong>
+            <article class="tarjeta-resumen"><span>Productos</span><strong id="contador-productos">6</strong></article>
+            <article class="tarjeta-resumen"><span>Categorías</span><strong id="contador-categorias">2</strong>
             </article>
             <article class="tarjeta-resumen"><span>Solicitudes guardadas</span><strong
                 id="contador-solicitudes">0</strong></article>
@@ -82,10 +82,11 @@
               <label>Nombre del producto<input name="nombre" required maxlength="70"
                   placeholder="Ej. Producto nuevo"></label>
               <label>Categoría<select name="categoria" required>
-                  <option value="Categoría 1">Categoría 1</option>
-                  <option value="Categoría 2">Categoría 2</option>
-                  <option value="Categoría 3">Categoría 3</option>
+                  <option value="Kombucha">Kombucha</option>
+                  <option value="Kéfir">Kéfir</option>
                 </select></label>
+              <label class="campo-descripcion">Descripción<textarea name="descripcion" rows="2" required
+                  placeholder="Descripción breve del producto"></textarea></label>
               <label>Precio<input name="precio" type="number" min="0" step="100" required placeholder="0"></label>
               <label>Ruta o URL de imagen <span>(opcional)</span><input name="imagen" type="text"
                   placeholder="./assets/img/producto.jpg"></label>
@@ -101,6 +102,7 @@
                   <tr>
                     <th>Nombre</th>
                     <th>Categoría</th>
+                    <th>Descripción</th>
                     <th>Precio</th>
                     <th>Acciones</th>
                   </tr>
@@ -120,13 +122,12 @@
               <p class="nota-vacia">Todavía no hay solicitudes guardadas.</p>
             </div>
           </section>
-          <p class="nota">Accede ahora</p>
         </div>
       </div>
     </section>
   </main>
 
-  <footer><span>© 2026 Tienda Banyito</span><a href="./index.html">Volver a la tienda</a></footer>
+  <footer><span>© 2026 Kombechi</span><a href="./index.html">Volver a la tienda</a></footer>
 </body>
 
 </html>

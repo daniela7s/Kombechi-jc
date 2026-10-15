@@ -40,6 +40,30 @@ h1, h2 { font-family: Georgia, serif; }
   object-fit: contain;
   flex-shrink: 0;
 }
+.marca-logo {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  color: var(--texto);
+  font-family: "Bowlby One", Georgia, serif;
+  font-size: 18px;
+  white-space: nowrap;
+}
+.marca-logo:hover { color: var(--morado); }
+.simbolo-logo {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--morado);
+  font-family: "Urbanist", Arial, sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+}
 .nombre-tienda {
   color: var(--texto); font-family: "Bowlby One", Georgia, serif; font-size: 17px;
   white-space: nowrap; height: 40px; width: auto; object-fit: contain; display: flex;
@@ -130,7 +154,7 @@ h1, h2 { font-family: Georgia, serif; }
 .texto-superior { color: var(--morado); font-size: 10px; font-weight: bold; letter-spacing: 2px; }
 .encabezado-seccion h2 { margin: 10px 0 0; }
 .seccion-categorias .encabezado-seccion h2, .encabezado-destacados h2 { font-family: Arial, sans-serif; font-size: 30px; font-weight: bold; }
-.cuadricula-categorias { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.cuadricula-categorias { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
 .tarjeta-categoria {
   width: 100%; max-width: 220px; aspect-ratio: 1; margin: 0 auto; display: flex;
   flex-direction: column; align-items: center; justify-content: center; gap: 10px;
@@ -205,7 +229,7 @@ h1, h2 { font-family: Georgia, serif; }
 @media (max-width: 620px) {
   .seccion-categorias, .seccion-destacados { padding: 50px 0; }
   .encabezado-seccion { align-items: flex-start; flex-direction: column; }
-  .cuadricula-categorias { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .cuadricula-categorias { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .tarjeta-categoria { max-width: none; padding: 7px; gap: 6px; }
   .icono-categoria { width: clamp(34px, 12vw, 52px); height: clamp(34px, 12vw, 52px); }
   .tarjeta-categoria strong { font-size: clamp(9px, 2.8vw, 12px); }
@@ -283,11 +307,12 @@ h1, h2 { font-family: Georgia, serif; }
   overflow-wrap: anywhere;
 }
 .info-producto p { margin: 0; color: var(--texto-secundario); font-size: 13px; }
+.info-producto .descripcion-producto { margin-top: 7px; font-size: 12px; line-height: 1.4; }
 .info-producto .precio {
   flex-shrink: 0;
   color: var(--morado);
   white-space: nowrap;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 800;
 }
 .cantidad-producto {
@@ -344,6 +369,7 @@ h1, h2 { font-family: Georgia, serif; }
 @media (max-width: 950px) {
   .encabezado-tienda { gap: 8px; }
   .encabezado-tienda img { width: 130px; }
+  .marca-logo { font-size: 16px; }
   .encabezado-tienda .navegacion { gap: 10px; font-size: 12px; }
   .encabezado-tienda .enlace-admin { padding: 6px 8px; font-size: 12px; }
   .banner { min-height: 420px; }
@@ -352,6 +378,8 @@ h1, h2 { font-family: Georgia, serif; }
 @media (max-width: 620px) {
   .encabezado-tienda { padding: 10px 12px; gap: 8px; }
   .encabezado-tienda img { width: 82px; height: 42px; }
+  .marca-logo { gap: 5px; font-size: 14px; }
+  .simbolo-logo { width: 29px; height: 29px; font-size: 16px; }
   .encabezado-tienda .navegacion { justify-content: flex-start; gap: 8px; font-size: 11px; }
   .encabezado-tienda .enlace-admin { padding: 5px 6px; font-size: 11px; }
 

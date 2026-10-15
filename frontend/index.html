@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tienda / Inicio</title>
+  <title>Kombechi | Inicio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Urbanist:wght@400;500;600;700;800&display=swap"
@@ -14,8 +14,10 @@
 <body>
   <!-- Encabezado principal -->
   <header class="encabezado-tienda">
-    <img src="./assets/img/kombechi-logo.svg"
-      alt="Logo Kombechi con Bechi" loading="lazy">
+    <a class="marca-logo" href="#inicio" aria-label="Kombechi, inicio">
+      <span class="simbolo-logo" aria-hidden="true">K</span>
+      <span>Kombechi</span>
+    </a>
     <!-- Menú de navegación -->
     <nav class="navegacion">
       <a href="#inicio" aria-current="page">Inicio</a>
@@ -52,25 +54,18 @@
       </div>
 
       <div class="cuadricula-categorias">
-        <a class="tarjeta-categoria categoria-1" href="./index.html?categoria=Categor%C3%ADa%201#catalogo">
+        <a class="tarjeta-categoria categoria-1" href="./index.html?categoria=Kombucha#catalogo">
           <span class="icono-categoria"><img
               src=""
               alt="Imagen de ejemplo" loading="lazy"></span>
-          <strong>Categoría 1</strong>
+          <strong>Kombucha</strong>
           <span>Ver productos →</span>
         </a>
-        <a class="tarjeta-categoria categoria-2" href="./index.html?categoria=Categor%C3%ADa%202#catalogo">
+        <a class="tarjeta-categoria categoria-2" href="./index.html?categoria=K%C3%A9fir#catalogo">
           <span class="icono-categoria"><img
               src=""
               alt="Imagen de ejemplo" loading="lazy"></span>
-          <strong>Categoría 2</strong>
-          <span>Ver productos →</span>
-        </a>
-        <a class="tarjeta-categoria categoria-3" href="./index.html?categoria=Categor%C3%ADa%203#catalogo">
-          <span class="icono-categoria"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"></span>
-          <strong>Categoría 3</strong>
+          <strong>Kéfir</strong>
           <span>Ver productos →</span>
         </a>
       </div>
@@ -91,7 +86,7 @@
                 src=""
                 alt="Imagen de ejemplo" loading="lazy"></div>
             <div class="info-destacada">
-              <h3>Producto 1</h3>
+              <h3>Kombucha de limón y jengibre</h3>
             </div>
           </article>
           <article class="tarjeta-destacada">
@@ -99,7 +94,7 @@
                 src=""
                 alt="Imagen de ejemplo" loading="lazy"></div>
             <div class="info-destacada">
-              <h3>Producto 2</h3>
+              <h3>Kombucha de frutos rojos</h3>
             </div>
           </article>
           <article class="tarjeta-destacada">
@@ -107,7 +102,7 @@
                 src=""
                 alt="Imagen de ejemplo" loading="lazy"></div>
             <div class="info-destacada">
-              <h3>Producto 3</h3>
+              <h3>Kombucha de piña</h3>
             </div>
           </article>
         </div>
@@ -133,9 +128,8 @@
         <label for="filtro-categoria">Categoría
           <select id="filtro-categoria">
             <option value="">Todas las categorías</option>
-            <option value="Categoría 1">Categoría 1</option>
-            <option value="Categoría 2">Categoría 2</option>
-            <option value="Categoría 3">Categoría 3</option>
+            <option value="Kombucha">Kombucha</option>
+            <option value="Kéfir">Kéfir</option>
           </select>
         </label>
         <label for="orden-productos">Ordenar por
@@ -148,166 +142,10 @@
         </label>
       </div>
 
-      <p id="estado-catalogo" class="estado-catalogo" aria-live="polite">12 productos</p>
+      <p id="estado-catalogo" class="estado-catalogo" aria-live="polite">6 productos</p>
 
-      <div id="cuadricula-productos" class="catalogo" aria-live="polite">
-        <article class="tarjeta-producto" id="producto-1" data-categoria="Categoría 1" data-precio="0">
-          <div class="imagen-producto"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span class="etiqueta-producto">FOTO DEL
-              PRODUCTO</span></div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 1</h2>
-              <p>Categoría 1</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%201#contacto">Comprar</a>
-        </article>
-        <article class="tarjeta-producto" id="producto-2" data-categoria="Categoría 2" data-precio="0">
-          <div class="imagen-producto tono-2"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span class="etiqueta-producto">FOTO DEL
-              PRODUCTO</span></div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 2</h2>
-              <p>Categoría 2</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%202#contacto">Comprar</a>
-        </article>
-        <article class="tarjeta-producto" id="producto-3" data-categoria="Categoría 3" data-precio="0">
-          <div class="imagen-producto tono-3"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span class="etiqueta-producto">FOTO DEL
-              PRODUCTO</span></div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 3</h2>
-              <p>Categoría 3</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%203#contacto">Comprar</a>
-        </article>
-        <article class="tarjeta-producto" id="producto-4" data-categoria="Categoría 1" data-precio="0">
-          <div class="imagen-producto"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span class="etiqueta-producto">FOTO DEL PRODUCTO</span>
-          </div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 4</h2>
-              <p>Categoría 1</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%204#contacto">Comprar</a>
-        </article>
-        <article class="tarjeta-producto" id="producto-5" data-categoria="Categoría 2" data-precio="0">
-          <div class="imagen-producto tono-2"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span class="etiqueta-producto">FOTO DEL
-              PRODUCTO</span></div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 5</h2>
-              <p>Categoría 2</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%205#contacto">Comprar</a>
-        </article>
-        <article class="tarjeta-producto" id="producto-6" data-categoria="Categoría 3" data-precio="0">
-          <div class="imagen-producto tono-3"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span class="etiqueta-producto">FOTO DEL
-              PRODUCTO</span></div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 6</h2>
-              <p>Categoría 3</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%206#contacto">Comprar</a>
-        </article>
-        <article class="tarjeta-producto" id="producto-7" data-categoria="Categoría 1" data-precio="0">
-          <div class="imagen-producto"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span
-              class="etiqueta-producto">FOTO DEL PRODUCTO</span></div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 7</h2>
-              <p>Categoría 1</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%207#contacto">Comprar</a>
-        </article>
-        <article class="tarjeta-producto" id="producto-8" data-categoria="Categoría 2" data-precio="0">
-          <div class="imagen-producto tono-2"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span class="etiqueta-producto">FOTO DEL
-              PRODUCTO</span></div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 8</h2>
-              <p>Categoría 2</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%208#contacto">Comprar</a>
-        </article>
-        <article class="tarjeta-producto" id="producto-9" data-categoria="Categoría 3" data-precio="0">
-          <div class="imagen-producto tono-3"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span
-              class="etiqueta-producto">FOTO DEL PRODUCTO</span></div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 9</h2>
-              <p>Categoría 3</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%209#contacto">Comprar</a>
-        </article>
-        <article class="tarjeta-producto" id="producto-10" data-categoria="Categoría 1" data-precio="0">
-          <div class="imagen-producto"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span class="etiqueta-producto">FOTO DEL
-              PRODUCTO</span></div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 10</h2>
-              <p>Categoría 1</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%2010#contacto">Comprar</a>
-        </article>
-        <article class="tarjeta-producto" id="producto-11" data-categoria="Categoría 2" data-precio="0">
-          <div class="imagen-producto tono-2"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span class="etiqueta-producto">FOTO DEL
-              PRODUCTO</span></div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 11</h2>
-              <p>Categoría 2</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%2011#contacto">Comprar</a>
-        </article>
-        <article class="tarjeta-producto" id="producto-12" data-categoria="Categoría 3" data-precio="0">
-          <div class="imagen-producto tono-3"><img
-              src=""
-              alt="Imagen de ejemplo" loading="lazy"><span class="etiqueta-producto">FOTO DEL
-              PRODUCTO</span></div>
-          <div class="info-producto">
-            <div>
-              <h2>Producto 12</h2>
-              <p>Categoría 3</p>
-            </div><span class="precio">$00.000</span>
-          </div>
-          <a class="boton-tarjeta" href="./index.html?producto=Producto%2012#contacto">Comprar</a>
-        </article>
-      </div>
+      <div id="cuadricula-productos" class="catalogo" aria-live="polite"></div>
+      <noscript>Activa JavaScript para ver el catálogo de productos.</noscript>
     </section>
 
     <!-- NOSOTROS -->
@@ -336,6 +174,7 @@
         <label>Correo electrónico
           <input name="correo" type="email" required autocomplete="email" placeholder="tu@correo.com"></label>
 
+        <label>Teléfono<input name="telefono" type="tel" required autocomplete="tel" placeholder="Tu número de teléfono"></label>
         <label>Producto<input name="producto" id="producto-seleccionado" required maxlength="100"
             placeholder="Producto que te interesa"></label>
         <label>Cantidad<input name="cantidad" id="cantidad-pedida" type="number" min="1" step="1" value="1"
@@ -351,7 +190,7 @@
   <!-- FOOTER -->
   <footer class="pie-pagina">
     <div class="marca-pie">
-      <img class="nombre-tienda" src="" alt="Logo del negocio">
+      <span class="nombre-tienda">Kombechi</span>
       <span>© 2026 · Todos los derechos reservados</span>
     </div>
     <div class="info-pie">
@@ -366,4 +205,5 @@
 </body>
 
 </html>
+
 
