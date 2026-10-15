@@ -1,0 +1,7 @@
+{
+  id: 1,
+  nombre: "Kombucha de fresa",
+  precio: 12.000
+  descripcion: "Deliciosa kombucha de fresa, prodiedad calmante 200ml",
+  imagen: "./assets/img/kombucha-fresa.jpg"
+}
