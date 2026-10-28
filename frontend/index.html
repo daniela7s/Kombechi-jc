@@ -6,7 +6,7 @@
   <title>Kombechi | Inicio</title>
   <link rel="preconnect" href="https://googleapis.com">
   <link rel="preconnect" href="https://gstatic.com" crossorigin>
-  <link href="https://googleapis.com/css2?family=Bowlby+One&family=Urbanist:wght@400;500;600;700;800&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Urbanist:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -76,26 +76,7 @@
             <p>Una selección para ti</p>
           </div>
         </div>
-        <div class="cuadricula-destacados">
-          <article class="tarjeta-destacada">
-            <div class="imagen-destacada"><img src="" alt="Imagen de ejemplo" loading="lazy"></div>
-            <div class="info-destacada">
-              <h3>Kombucha de limón y jengibre</h3>
-            </div>
-          </article>
-          <article class="tarjeta-destacada">
-            <div class="imagen-destacada"><img src="" alt="Imagen de ejemplo" loading="lazy"></div>
-            <div class="info-destacada">
-              <h3>Kombucha de frutos rojos</h3>
-            </div>
-          </article>
-          <article class="tarjeta-destacada">
-            <div class="imagen-destacada"><img src="" alt="Imagen de ejemplo" loading="lazy"></div>
-            <div class="info-destacada">
-              <h3>Kombucha de piña</h3>
-            </div>
-          </article>
-        </div>
+        <div class="cuadricula-destacados" id="cuadricula-destacados"></div>
         <div class="boton-centrado"><a class="boton-catalogo" href="#catalogo">Ver catálogo completo</a></div>
       </div>
     </section>
@@ -133,129 +114,8 @@
 
       <p id="estado-catalogo" class="estado-catalogo" aria-live="polite">6 productos</p>
 
-      <!-- Aquí es donde JavaScript inyectará dinámicamente las tarjetas con appendChild -->
-      <div id="cuadricula-productos" class="catalogo" aria-live="polite">
-        <article class="tarjeta-producto">
-          <div class="imagen-producto"></div>
-          <div class="info-producto">
-            <div>
-              <h2>Kombucha de limón y jengibre</h2>
-              <p>Kombucha</p>
-              <p class="descripcion-producto">Bebida fermentada, cítrica y refrescante.</p>
-            </div>
-            <span class="precio">$12.000 COP</span>
-          </div>
-          <div class="cantidad-producto">
-            <span>Cantidad</span>
-            <div class="controles-cantidad">
-              <button class="boton-cantidad disminuir-cantidad" type="button" aria-label="Disminuir cantidad">−</button>
-              <span class="numero-cantidad">1</span>
-              <button class="boton-cantidad aumentar-cantidad" type="button" aria-label="Aumentar cantidad">+</button>
-            </div>
-          </div>
-          <a class="boton-tarjeta" href="#contacto">Comprar ahora</a>
-        </article>
-        <article class="tarjeta-producto">
-          <div class="imagen-producto"></div>
-          <div class="info-producto">
-            <div>
-              <h2>Kombucha de frutos rojos</h2>
-              <p>Kombucha</p>
-              <p class="descripcion-producto">Una combinación frutal con un toque ácido.</p>
-            </div>
-            <span class="precio">$12.000 COP</span>
-          </div>
-          <div class="cantidad-producto">
-            <span>Cantidad</span>
-            <div class="controles-cantidad">
-              <button class="boton-cantidad disminuir-cantidad" type="button" aria-label="Disminuir cantidad">−</button>
-              <span class="numero-cantidad">1</span>
-              <button class="boton-cantidad aumentar-cantidad" type="button" aria-label="Aumentar cantidad">+</button>
-            </div>
-          </div>
-          <a class="boton-tarjeta" href="#contacto">Comprar ahora</a>
-        </article>
-        <article class="tarjeta-producto">
-          <div class="imagen-producto"></div>
-          <div class="info-producto">
-            <div>
-              <h2>Kombucha de piña</h2>
-              <p>Kombucha</p>
-              <p class="descripcion-producto">Perfil tropical, fresco y afrutado.</p>
-            </div>
-            <span class="precio">$12.000 COP</span>
-          </div>
-          <div class="cantidad-producto">
-            <span>Cantidad</span>
-            <div class="controles-cantidad">
-              <button class="boton-cantidad disminuir-cantidad" type="button" aria-label="Disminuir cantidad">−</button>
-              <span class="numero-cantidad">1</span>
-              <button class="boton-cantidad aumentar-cantidad" type="button" aria-label="Aumentar cantidad">+</button>
-            </div>
-          </div>
-          <a class="boton-tarjeta" href="#contacto">Comprar ahora</a>
-        </article>
-        <article class="tarjeta-producto">
-          <div class="imagen-producto"></div>
-          <div class="info-producto">
-            <div>
-              <h2>Kéfir natural</h2>
-              <p>Kéfir</p>
-              <p class="descripcion-producto">Bebida fermentada de sabor suave y cremoso.</p>
-            </div>
-            <span class="precio">$10.000 COP</span>
-          </div>
-          <div class="cantidad-producto">
-            <span>Cantidad</span>
-            <div class="controles-cantidad">
-              <button class="boton-cantidad disminuir-cantidad" type="button" aria-label="Disminuir cantidad">−</button>
-              <span class="numero-cantidad">1</span>
-              <button class="boton-cantidad aumentar-cantidad" type="button" aria-label="Aumentar cantidad">+</button>
-            </div>
-          </div>
-          <a class="boton-tarjeta" href="#contacto">Comprar ahora</a>
-        </article>
-        <article class="tarjeta-producto">
-          <div class="imagen-producto"></div>
-          <div class="info-producto">
-            <div>
-              <h2>Kéfir de fresa</h2>
-              <p>Kéfir</p>
-              <p class="descripcion-producto">Una versión frutal con sabor a fresa.</p>
-            </div>
-            <span class="precio">$11.000 COP</span>
-          </div>
-          <div class="cantidad-producto">
-            <span>Cantidad</span>
-            <div class="controles-cantidad">
-              <button class="boton-cantidad disminuir-cantidad" type="button" aria-label="Disminuir cantidad">−</button>
-              <span class="numero-cantidad">1</span>
-              <button class="boton-cantidad aumentar-cantidad" type="button" aria-label="Aumentar cantidad">+</button>
-            </div>
-          </div>
-          <a class="boton-tarjeta" href="#contacto">Comprar ahora</a>
-        </article>
-        <article class="tarjeta-producto">
-          <div class="imagen-producto"></div>
-          <div class="info-producto">
-            <div>
-              <h2>Kéfir de frutos rojos</h2>
-              <p>Kéfir</p>
-              <p class="descripcion-producto">Alternativa frutal para ampliar el catálogo.</p>
-            </div>
-            <span class="precio">$11.000 COP</span>
-          </div>
-          <div class="cantidad-producto">
-            <span>Cantidad</span>
-            <div class="controles-cantidad">
-              <button class="boton-cantidad disminuir-cantidad" type="button" aria-label="Disminuir cantidad">−</button>
-              <span class="numero-cantidad">1</span>
-              <button class="boton-cantidad aumentar-cantidad" type="button" aria-label="Aumentar cantidad">+</button>
-            </div>
-          </div>
-          <a class="boton-tarjeta" href="#contacto">Comprar ahora</a>
-        </article>
-      </div>
+      <!-- React muestra los productos guardados en MongoDB. -->
+      <div id="cuadricula-productos" class="catalogo" aria-live="polite"></div>
     </section>
 
     <!-- NOSOTROS -->
@@ -311,7 +171,10 @@
   </footer>
 
   <!--Enlace al js -->
-  <script src="js/app.js" defer></script>
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
+
+
+
 

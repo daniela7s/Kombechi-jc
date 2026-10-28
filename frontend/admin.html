@@ -11,7 +11,7 @@
     href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="./admin.css">
-  <script src="./js/app.js" defer></script>
+  <script type="module" src="/src/adminMain.jsx"></script>
 
 </head>
 
@@ -30,16 +30,13 @@
       <form id="formulario-acceso">
         <label for="correo-admin">Correo electrónico</label>
         <input id="correo-admin" name="correo" type="email" autocomplete="username" required
-          placeholder="admin@tienda.com">
+          placeholder="tu@correo.com">
         <label for="clave-admin">Contraseña</label>
         <input id="clave-admin" name="contrasena" type="password" autocomplete="current-password" required
-          placeholder="admin123">
+          placeholder="Tu contraseña">
         <button class="boton-tarjeta" type="submit">Entrar al panel</button>
       </form>
-      <p class="credenciales-demo">Acceso de demostración: <strong>admin@tienda.com</strong> / <strong>admin123</strong>
-      </p>
-      <p id="estado-acceso" class="nota" role="status">acceso de demostración
-        se guarda en este navegador.</p>
+      <p id="estado-acceso" class="nota" role="status"></p>
     </section>
 
     <section class="panel-admin" id="panel-admin" hidden aria-labelledby="titulo-panel">
@@ -54,33 +51,32 @@
           <strong>Panel</strong>
           <a href="#resumen">Resumen</a>
           <a href="#gestion-productos">Productos</a>
-          <a href="#solicitudes">Solicitudes</a>
+          <a href="#solicitudes">Pedidos</a>
           <a href="./index.html">Ver tienda</a>
         </aside>
         <div class="contenido-admin">
           <section id="resumen" class="encabezado-admin">
             <div>
               <h2>Resumen de la tienda</h2>
-              <p>Gestiona el catálogo y revisa los mensajes del formulario.</p>
+              <p>Gestiona los productos y revisa los pedidos de la tienda.</p>
             </div>
           </section>
           <div class="cuadricula-resumen">
             <article class="tarjeta-resumen"><span>Productos</span><strong id="contador-productos">6</strong></article>
             <article class="tarjeta-resumen"><span>Categorías</span><strong id="contador-categorias">2</strong>
             </article>
-            <article class="tarjeta-resumen"><span>Solicitudes guardadas</span><strong
+            <article class="tarjeta-resumen"><span>Pedidos pendientes</span><strong
                 id="contador-solicitudes">0</strong></article>
           </div>
           <section id="gestion-productos" class="seccion-admin">
             <div class="titulo-seccion">
               <div>
                 <h3>Productos</h3>
-                <p class="ayuda-seccion">Los cambios se guardan en este navegador.</p>
+                <p class="ayuda-seccion">Los productos se guardan en la base de datos.</p>
               </div>
             </div>
             <form id="formulario-producto" class="formulario-producto">
-              <input type="hidden" name="id">
-              <label>Nombre del producto<input name="nombre" required maxlength="70"
+                        <label>Nombre del producto<input name="nombre" required maxlength="70"
                   placeholder="Ej. Producto nuevo"></label>
               <label>Categoría<select name="categoria" required>
                   <option value="Kombucha">Kombucha</option>
@@ -93,8 +89,7 @@
                   placeholder="./assets/img/producto.jpg"></label>
               <label class="casilla-destacado"><input name="destacado" type="checkbox"> Mostrar en destacados</label>
               <div class="acciones-formulario"><button class="boton-tarjeta" id="boton-guardar-producto"
-                  type="submit">Agregar producto</button><button class="boton-secundario" id="boton-cancelar-edicion"
-                  type="button" hidden>Cancelar edición</button></div>
+                  type="submit">Agregar producto</button></div>
               <p id="estado-producto" class="nota" role="status"></p>
             </form>
             <div class="contenedor-tabla">
@@ -115,9 +110,9 @@
           <section id="solicitudes" class="seccion-admin">
             <div class="titulo-seccion">
               <div>
-                <h3>Solicitudes de contacto</h3>
-                <p class="ayuda-seccion">Mensajes guardados</p>
-              </div><button id="boton-borrar-solicitudes" class="boton-secundario" type="button">Borrar todas</button>
+                <h3>Pedidos pendientes</h3>
+                <p class="ayuda-seccion">Pedidos realizados en la tienda</p>
+              </div>
             </div>
             <div id="lista-solicitudes-admin" class="lista-solicitudes">
               <p class="nota-vacia">Todavía no hay solicitudes guardadas.</p>
@@ -132,4 +127,7 @@
 </body>
 
 </html>
+
+
+
 
