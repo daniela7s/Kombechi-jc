@@ -84,6 +84,27 @@ app.post('/api/productos', requiereAdmin, async (req, res) => {
   }
 });
 
+app.put('/api/productos/:id', requiereAdmin, async (req, res) => {
+  const { nombre, categoria, precio, descripcion, imagen = '', destacado = false } = req.body || {};
+  if (!String(nombre || '').trim() || !['Kombucha', 'Kéfir'].includes(categoria) || !Number.isFinite(Number(precio)) || Number(precio) < 0 || !String(descripcion || '').trim()) {
+    return res.status(400).json({ error: 'Completa nombre, categoría, precio y descripción.' });
+  }
+  try {
+    const producto = await Producto.findByIdAndUpdate(req.params.id, {
+      nombre: String(nombre).trim(),
+      categoria,
+      precio: Number(precio),
+      descripcion: String(descripcion).trim(),
+      imagen: String(imagen).trim(),
+      destacado: Boolean(destacado),
+    }, { new: true, runValidators: true });
+    if (!producto) return res.status(404).json({ error: 'No se encontró el producto.' });
+    res.json(producto);
+  } catch (error) {
+    res.status(400).json({ error: 'No se pudieron guardar los cambios del producto.' });
+  }
+});
+
 app.delete('/api/productos/:id', requiereAdmin, async (req, res) => {
   try {
     const producto = await Producto.findByIdAndDelete(req.params.id);
@@ -133,6 +154,10 @@ app.patch('/api/pedidos/:id/listo', requiereAdmin, async (req, res) => {
   }
 });
 
+app.use('/api', (req, res) => {
+  res.status(404).json({ error: `La ruta ${req.method} ${req.originalUrl} no existe en la API.` });
+});
+
 const carpetaFrontend = path.join(__dirname, '..', 'frontend', 'dist');
 app.use(express.static(carpetaFrontend));
 app.get(/^(?!\/api\/).*/, (req, res, next) => {
@@ -146,10 +171,16 @@ async function iniciar() {
     try {
       await mongoose.connect(process.env.MONGODB_URI, { serverSelectionTimeoutMS: 8000 });
       console.log('MongoDB conectado.');
+      const productosIniciales = require('./data/productos.json');
       if (await Producto.countDocuments() === 0) {
-        const productosIniciales = require('./productos.json');
         if (productosIniciales.length) await Producto.insertMany(productosIniciales);
         console.log('Catálogo inicial cargado.');
+      } else {
+        for (const producto of productosIniciales) {
+          if (producto.imagen) {
+            await Producto.updateOne({ id: producto.id, imagen: '' }, { $set: { imagen: producto.imagen } });
+          }
+        }
       }
     } catch (error) {
       console.error(`MongoDB no está disponible: ${error.message}`);

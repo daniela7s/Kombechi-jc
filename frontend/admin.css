@@ -352,6 +352,12 @@ footer a {
   background: #eef3e4;
 }
 
+.acciones-tabla-producto {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .credenciales-demo {
   padding: 10px 12px;
   border-radius: 7px;

@@ -2,11 +2,14 @@ import { createRoot } from 'react-dom/client';
 
 const moneda = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
 
-function FilasProductos({ productos, eliminar }) {
+function FilasProductos({ productos, eliminar, editar }) {
   if (!productos.length) return <tr><td colSpan="5">Todavía no hay productos.</td></tr>;
   return productos.map((producto) => <tr key={producto._id}>
     <td>{producto.nombre}</td><td>{producto.categoria}</td><td>{producto.descripcion}</td>
-    <td>{moneda.format(producto.precio)}</td><td><button className="boton-secundario" type="button" onClick={() => eliminar(producto._id)}>Eliminar</button></td>
+    <td>{moneda.format(producto.precio)}</td><td><div className="acciones-tabla-producto">
+      <button className="boton-secundario" type="button" onClick={() => editar(producto)}>Editar</button>
+      <button className="boton-secundario" type="button" onClick={() => eliminar(producto._id)}>Eliminar</button>
+    </div></td>
   </tr>);
 }
 
@@ -28,6 +31,8 @@ export function iniciarAdmin() {
   const panel = document.getElementById('panel-admin');
   const estadoAcceso = document.getElementById('estado-acceso');
   const estadoProducto = document.getElementById('estado-producto');
+  const botonGuardarProducto = document.getElementById('boton-guardar-producto');
+  const botonCancelarEdicion = document.getElementById('boton-cancelar-edicion');
   const tabla = document.getElementById('lista-productos-admin');
   const listaPedidos = document.getElementById('lista-solicitudes-admin');
   const botonSalir = document.getElementById('boton-cerrar-sesion');
@@ -38,6 +43,7 @@ export function iniciarAdmin() {
   let token = sessionStorage.getItem('kombechi-admin-token');
   let productosActuales = [];
   let pedidosActuales = [];
+  let productoEditandoId = null;
   const api = async (url, opciones = {}) => {
     const respuesta = await fetch(url, {
       ...opciones,
@@ -47,6 +53,10 @@ export function iniciarAdmin() {
         ...opciones.headers,
       },
     });
+    const tipoContenido = respuesta.headers.get('content-type') || '';
+    if (!tipoContenido.includes('application/json')) {
+      throw new Error(`El servidor respondió con una página en vez de datos (HTTP ${respuesta.status}). Reinicia el backend desde Kombechi-jc para cargar la ruta de edición.`);
+    }
     const datos = await respuesta.json();
     if (!respuesta.ok) throw new Error(datos.error || 'No se pudo completar la solicitud.');
     return datos;
@@ -54,7 +64,7 @@ export function iniciarAdmin() {
   const mostrarAcceso = () => { acceso.hidden = false; panel.hidden = true; };
   const mostrarPanel = () => { acceso.hidden = true; panel.hidden = false; };
   const renderizar = () => {
-    raizProductos.render(<FilasProductos productos={productosActuales} eliminar={eliminarProducto} />);
+    raizProductos.render(<FilasProductos productos={productosActuales} eliminar={eliminarProducto} editar={editarProducto} />);
     raizPedidos.render(<TarjetasPedidos pedidos={pedidosActuales} marcarListo={marcarPedidoListo} />);
     document.getElementById('contador-productos').textContent = String(productosActuales.length);
     document.getElementById('contador-categorias').textContent = String(new Set(productosActuales.map((producto) => producto.categoria)).size);
@@ -86,6 +96,27 @@ export function iniciarAdmin() {
       await cargarDatos();
       estadoProducto.textContent = 'Producto eliminado.';
     } catch (error) { estadoProducto.textContent = error.message; }
+  }
+  function editarProducto(producto) {
+    productoEditandoId = producto._id;
+    formularioProducto.elements.nombre.value = producto.nombre;
+    formularioProducto.elements.categoria.value = producto.categoria;
+    formularioProducto.elements.descripcion.value = producto.descripcion;
+    formularioProducto.elements.precio.value = String(producto.precio);
+    formularioProducto.elements.imagen.value = producto.imagen || '';
+    formularioProducto.elements.destacado.checked = Boolean(producto.destacado);
+    botonGuardarProducto.textContent = 'Guardar cambios';
+    botonCancelarEdicion.hidden = false;
+    estadoProducto.textContent = `Editando: ${producto.nombre}`;
+    formularioProducto.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function cancelarEdicion() {
+    productoEditandoId = null;
+    formularioProducto.reset();
+    formularioProducto.elements.categoria.value = 'Kombucha';
+    botonGuardarProducto.textContent = 'Agregar producto';
+    botonCancelarEdicion.hidden = true;
+    estadoProducto.textContent = '';
   }
   async function marcarPedidoListo(id) {
     try {
@@ -119,13 +150,16 @@ export function iniciarAdmin() {
     campos.precio = Number(campos.precio);
     campos.destacado = new FormData(formularioProducto).has('destacado');
     try {
-      await api('/api/productos', { method: 'POST', body: JSON.stringify(campos) });
-      formularioProducto.reset();
-      formularioProducto.elements.categoria.value = 'Kombucha';
+      const editando = Boolean(productoEditandoId);
+      const ruta = editando ? `/api/productos/${productoEditandoId}` : '/api/productos';
+      await api(ruta, { method: editando ? 'PUT' : 'POST', body: JSON.stringify(campos) });
+      cancelarEdicion();
       await cargarDatos();
-      estadoProducto.textContent = 'Producto agregado al catálogo.';
+      estadoProducto.textContent = editando ? 'Cambios guardados en MongoDB.' : 'Producto agregado al catálogo.';
     } catch (error) { estadoProducto.textContent = error.message; }
   });
+
+  botonCancelarEdicion?.addEventListener('click', cancelarEdicion);
 
   botonSalir?.addEventListener('click', async () => {
     try { await api('/api/admin/logout', { method: 'POST' }); } catch { /* Se cierra la sesión local igualmente. */ }

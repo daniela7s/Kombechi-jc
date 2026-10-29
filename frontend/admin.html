@@ -84,12 +84,13 @@
                 </select></label>
               <label class="campo-descripcion">Descripción<textarea name="descripcion" rows="2" required
                   placeholder="Descripción breve del producto"></textarea></label>
-              <label>Precio<input name="precio" type="number" min="0" step="100" required placeholder="0"></label>
+              <label>Precio<input name="precio" type="number" min="0" step="1" required placeholder="0"></label>
               <label>Ruta o URL de imagen <span>(opcional)</span><input name="imagen" type="text"
                   placeholder="./assets/img/producto.jpg"></label>
               <label class="casilla-destacado"><input name="destacado" type="checkbox"> Mostrar en destacados</label>
               <div class="acciones-formulario"><button class="boton-tarjeta" id="boton-guardar-producto"
-                  type="submit">Agregar producto</button></div>
+                  type="submit">Agregar producto</button><button class="boton-secundario" id="boton-cancelar-edicion"
+                  type="button" hidden>Cancelar edición</button></div>
               <p id="estado-producto" class="nota" role="status"></p>
             </form>
             <div class="contenedor-tabla">
