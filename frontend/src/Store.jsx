@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
 const moneda = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
 
 async function cargarProductos() {
-  const respuesta = await fetch('/api/productos');
+  const respuesta = await fetch(`${API_URL}/api/productos`);
   const datos = await respuesta.json();
   if (!respuesta.ok) throw new Error(datos.error || 'No se pudieron cargar los productos.');
   return Array.isArray(datos) ? datos : [];
@@ -109,14 +110,15 @@ export function conectarFormularioPedido() {
     const datos = Object.fromEntries(new FormData(formulario).entries());
 
     try {
-      const respuesta = await fetch('/api/pedidos', {
+      const respuesta = await fetch(`${API_URL}/api/pedidos`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...datos, cantidad: Number(datos.cantidad) }),
       });
       const resultado = await respuesta.json();
       if (!respuesta.ok) throw new Error(resultado.error || 'No se pudo enviar el pedido.');
       formulario.reset();
-      estado.textContent = 'Tu pedido fue enviado. La tienda se pondrá en contacto contigo.';
+      estado.textContent = `Gracias, ${datos.nombre}. Tu pedido quedó registrado.`;
+      window.alert(`¡Gracias, ${datos.nombre}! Tu pedido ya quedó registrado en Kombechi. Nos pondremos en contacto contigo.`);
     } catch (problema) {
       estado.textContent = problema.message;
     }

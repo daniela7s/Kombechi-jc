@@ -1,196 +1,71 @@
+require('dotenv').config();
 require('dns').setServers(['8.8.8.8', '8.8.4.4']);
+
+const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
-const crypto = require('node:crypto');
+const fs = require('node:fs');
 const path = require('node:path');
-require('dotenv').config();
 
-const Producto = require('./models/productos');
-const Pedido = require('./models/pedidos');
+const conectarMongo = require('./config/conexion');
+const rutasAdmin = require('./routes/admin');
+const rutasPedidos = require('./routes/pedidos');
+const rutasProductos = require('./routes/productos');
+
 const app = express();
-const sesiones = new Map();
-const DURACION_SESION = 8 * 60 * 60 * 1000;
+const origenesPermitidos = new Set([
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  ...(process.env.FRONTEND_URL || '').split(',').map((url) => url.trim()).filter(Boolean),
+]);
 
+app.use(cors({
+  origin(origen, callback) {
+    if (!origen || origenesPermitidos.has(origen)) return callback(null, true);
+    return callback(new Error('Este sitio no está autorizado para conectarse con Kombechi.'));
+  },
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(express.json({ limit: '1mb' }));
 
-function validarHash(contrasena, hashConfigurado) {
-  if (!hashConfigurado) return false;
-  const [algoritmo, sal, hashGuardado] = hashConfigurado.split('$');
-  if (algoritmo !== 'scrypt' || !sal || !hashGuardado) return false;
-  const esperado = Buffer.from(hashGuardado, 'hex');
-  const recibido = crypto.scryptSync(contrasena, sal, esperado.length);
-  return esperado.length === recibido.length && crypto.timingSafeEqual(esperado, recibido);
-}
-
-function requiereAdmin(req, res, next) {
-  const token = req.get('Authorization')?.replace(/^Bearer\s+/i, '');
-  const sesion = token && sesiones.get(token);
-  if (!sesion || sesion.expira < Date.now()) {
-    if (token) sesiones.delete(token);
-    return res.status(401).json({ error: 'Inicia sesión para continuar.' });
-  }
-  next();
-}
-
 app.get('/api/health', (req, res) => {
-  res.json({ estado: 'ok', mongodb: mongoose.connection.readyState === 1 ? 'conectado' : 'desconectado' });
+  const mongodb = mongoose.connection.readyState === 1 ? 'conectado' : 'desconectado';
+  res.status(mongodb === 'conectado' ? 200 : 503).json({ estado: mongodb === 'conectado' ? 'ok' : 'error', mongodb });
 });
-
-app.post('/api/admin/login', (req, res) => {
-  const correo = String(req.body?.correo || '').trim().toLowerCase();
-  const contrasena = String(req.body?.contrasena || '');
-  const correoAdmin = String(process.env.ADMIN_EMAIL || '').trim().toLowerCase();
-  if (!correoAdmin || correo !== correoAdmin || !validarHash(contrasena, process.env.ADMIN_PASSWORD_HASH)) {
-    return res.status(401).json({ error: 'El correo o la contraseña no son correctos.' });
-  }
-  const token = crypto.randomBytes(32).toString('hex');
-  sesiones.set(token, { expira: Date.now() + DURACION_SESION });
-  res.json({ token, correo: correoAdmin });
-});
-
-app.post('/api/admin/logout', requiereAdmin, (req, res) => {
-  const token = req.get('Authorization').replace(/^Bearer\s+/i, '');
-  sesiones.delete(token);
-  res.json({ mensaje: 'Sesión cerrada.' });
-});
-
-app.get('/api/productos', async (req, res) => {
-  try {
-    res.json(await Producto.find().sort({ id: 1 }).lean());
-  } catch (error) {
-    res.status(503).json({ error: 'No se pudieron cargar los productos. Revisa la conexión con MongoDB.' });
-  }
-});
-
-app.post('/api/productos', requiereAdmin, async (req, res) => {
-  const { nombre, categoria, precio, descripcion, imagen = '', destacado = false } = req.body || {};
-  if (!String(nombre || '').trim() || !['Kombucha', 'Kéfir'].includes(categoria) || !Number.isFinite(Number(precio)) || Number(precio) < 0 || !String(descripcion || '').trim()) {
-    return res.status(400).json({ error: 'Completa nombre, categoría, precio y descripción.' });
-  }
-  try {
-    const ultimo = await Producto.findOne().sort({ id: -1 }).select('id').lean();
-    const producto = await Producto.create({
-      id: (ultimo?.id || 0) + 1,
-      nombre: String(nombre).trim(),
-      categoria,
-      precio: Number(precio),
-      descripcion: String(descripcion).trim(),
-      imagen: String(imagen).trim(),
-      destacado: Boolean(destacado),
-    });
-    res.status(201).json(producto);
-  } catch (error) {
-    res.status(500).json({ error: 'No se pudo guardar el producto.' });
-  }
-});
-
-app.put('/api/productos/:id', requiereAdmin, async (req, res) => {
-  const { nombre, categoria, precio, descripcion, imagen = '', destacado = false } = req.body || {};
-  if (!String(nombre || '').trim() || !['Kombucha', 'Kéfir'].includes(categoria) || !Number.isFinite(Number(precio)) || Number(precio) < 0 || !String(descripcion || '').trim()) {
-    return res.status(400).json({ error: 'Completa nombre, categoría, precio y descripción.' });
-  }
-  try {
-    const producto = await Producto.findByIdAndUpdate(req.params.id, {
-      nombre: String(nombre).trim(),
-      categoria,
-      precio: Number(precio),
-      descripcion: String(descripcion).trim(),
-      imagen: String(imagen).trim(),
-      destacado: Boolean(destacado),
-    }, { new: true, runValidators: true });
-    if (!producto) return res.status(404).json({ error: 'No se encontró el producto.' });
-    res.json(producto);
-  } catch (error) {
-    res.status(400).json({ error: 'No se pudieron guardar los cambios del producto.' });
-  }
-});
-
-app.delete('/api/productos/:id', requiereAdmin, async (req, res) => {
-  try {
-    const producto = await Producto.findByIdAndDelete(req.params.id);
-    if (!producto) return res.status(404).json({ error: 'No se encontró el producto.' });
-    res.json({ mensaje: 'Producto eliminado.' });
-  } catch (error) {
-    res.status(400).json({ error: 'No se pudo eliminar el producto.' });
-  }
-});
-
-app.post('/api/pedidos', async (req, res) => {
-  const { nombre, correo, telefono, producto, productoId, cantidad, mensaje = '' } = req.body || {};
-  if (!String(nombre || '').trim() || !String(correo || '').trim() || !String(telefono || '').trim() || !String(producto || '').trim() || !Number.isInteger(Number(cantidad)) || Number(cantidad) < 1) {
-    return res.status(400).json({ error: 'Completa tus datos y el producto que quieres pedir.' });
-  }
-  try {
-    const pedido = await Pedido.create({
-      nombre: String(nombre).trim(),
-      correo: String(correo).trim(),
-      telefono: String(telefono).trim(),
-      producto: String(producto).trim(),
-      productoId: Number(productoId) || undefined,
-      cantidad: Number(cantidad),
-      mensaje: String(mensaje).trim(),
-    });
-    res.status(201).json({ mensaje: 'Tu pedido quedó registrado.', pedidoId: pedido.id });
-  } catch (error) {
-    res.status(500).json({ error: 'No se pudo registrar el pedido.' });
-  }
-});
-
-app.get('/api/pedidos', requiereAdmin, async (req, res) => {
-  try {
-    res.json(await Pedido.find().sort({ createdAt: -1 }).lean());
-  } catch (error) {
-    res.status(503).json({ error: 'No se pudieron cargar los pedidos.' });
-  }
-});
-
-app.patch('/api/pedidos/:id/listo', requiereAdmin, async (req, res) => {
-  try {
-    const pedido = await Pedido.findByIdAndDelete(req.params.id);
-    if (!pedido) return res.status(404).json({ error: 'No se encontró el pedido.' });
-    res.json({ mensaje: 'Pedido marcado como listo y retirado de la lista.' });
-  } catch (error) {
-    res.status(400).json({ error: 'No se pudo actualizar el pedido.' });
-  }
-});
-
+app.use('/api/admin', rutasAdmin);
+app.use('/api/productos', rutasProductos);
+app.use('/api/pedidos', rutasPedidos);
 app.use('/api', (req, res) => {
   res.status(404).json({ error: `La ruta ${req.method} ${req.originalUrl} no existe en la API.` });
 });
 
 const carpetaFrontend = path.join(__dirname, '..', 'frontend', 'dist');
-app.use(express.static(carpetaFrontend));
-app.get(/^(?!\/api\/).*/, (req, res, next) => {
-  if (req.path.startsWith('/api/')) return next();
-  res.sendFile(path.join(carpetaFrontend, 'index.html'), (error) => error && next(error));
-});
+const paginaInicio = path.join(carpetaFrontend, 'index.html');
+if (fs.existsSync(paginaInicio)) {
+  app.use(express.static(carpetaFrontend, {
+    setHeaders(res, archivo) {
+      if (path.extname(archivo) === '.html') res.setHeader('Cache-Control', 'no-store');
+    },
+  }));
+  app.use('/assets', (req, res) => res.status(404).type('text/plain').send('No se encontró el archivo solicitado.'));
+  app.get(/^(?!\/api\/).*/, (req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store');
+    res.sendFile(paginaInicio, (error) => error && next(error));
+  });
+}
 
 async function iniciar() {
   const puerto = Number(process.env.PORT) || 3000;
-  if (process.env.MONGODB_URI) {
-    try {
-      await mongoose.connect(process.env.MONGODB_URI, { serverSelectionTimeoutMS: 8000 });
-      console.log('MongoDB conectado.');
-      const productosIniciales = require('./data/productos.json');
-      if (await Producto.countDocuments() === 0) {
-        if (productosIniciales.length) await Producto.insertMany(productosIniciales);
-        console.log('Catálogo inicial cargado.');
-      } else {
-        for (const producto of productosIniciales) {
-          if (producto.imagen) {
-            await Producto.updateOne({ id: producto.id, imagen: '' }, { $set: { imagen: producto.imagen } });
-          }
-        }
-      }
-    } catch (error) {
-      console.error(`MongoDB no está disponible: ${error.message}`);
-    }
-  } else {
-    console.warn('Falta MONGODB_URI en backend/.env.');
+  try {
+    await conectarMongo();
+    app.listen(puerto, '0.0.0.0', () => console.log(`Kombechi está disponible en el puerto ${puerto}.`));
+  } catch (error) {
+    console.error(`No se pudo iniciar Kombechi: ${error.message}`);
+    process.exit(1);
   }
-  app.listen(puerto, () => console.log(`Kombechi está en http://localhost:${puerto}`));
 }
 
 iniciar();
-
-

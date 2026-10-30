@@ -6,7 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch --watch-path=server.js --watch-path=.env server.js",
+    "dev": "node --watch server.js",
     "admin:clave": "node generarClave.js"
   },
   "dependencies": {

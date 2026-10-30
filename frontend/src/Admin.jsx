@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client';
 
+const API_URL = import.meta.env.VITE_API_URL || '';
 const moneda = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
 
 function FilasProductos({ productos, eliminar, editar }) {
@@ -13,14 +14,17 @@ function FilasProductos({ productos, eliminar, editar }) {
   </tr>);
 }
 
-function TarjetasPedidos({ pedidos, marcarListo }) {
-  if (!pedidos.length) return <p className="nota-vacia">Todavía no hay pedidos pendientes.</p>;
+function TarjetasPedidos({ pedidos, marcarEstado }) {
+  if (!pedidos.length) return <p className="nota-vacia">Todavía no hay pedidos guardados.</p>;
   return pedidos.map((pedido) => <article className="tarjeta-solicitud" key={pedido._id}>
     <div className="encabezado-solicitud"><strong>{pedido.nombre}</strong><time>{new Date(pedido.createdAt).toLocaleString('es-CO')}</time></div>
     <p><strong>Producto:</strong> {pedido.producto} · <strong>Cantidad:</strong> {pedido.cantidad}</p>
     <p><strong>Contacto:</strong> <a href={`mailto:${pedido.correo}`}>{pedido.correo}</a> · {pedido.telefono}</p>
     {pedido.mensaje && <p><strong>Mensaje:</strong> {pedido.mensaje}</p>}
-    <button className="boton-secundario" type="button" onClick={() => marcarListo(pedido._id)}>✓ Listo</button>
+    <p><strong>Estado:</strong> {pedido.estado || 'Pendiente'}</p>
+    <button className="boton-secundario" type="button" onClick={() => marcarEstado(pedido._id, pedido.estado === 'Listo' ? 'Pendiente' : 'Listo')}>
+      {pedido.estado === 'Listo' ? 'Marcar pendiente' : 'Marcar listo'}
+    </button>
   </article>);
 }
 
@@ -45,7 +49,7 @@ export function iniciarAdmin() {
   let pedidosActuales = [];
   let productoEditandoId = null;
   const api = async (url, opciones = {}) => {
-    const respuesta = await fetch(url, {
+    const respuesta = await fetch(`${API_URL}${url}`, {
       ...opciones,
       headers: {
         ...(opciones.body ? { 'Content-Type': 'application/json' } : {}),
@@ -55,7 +59,7 @@ export function iniciarAdmin() {
     });
     const tipoContenido = respuesta.headers.get('content-type') || '';
     if (!tipoContenido.includes('application/json')) {
-      throw new Error(`El servidor respondió con una página en vez de datos (HTTP ${respuesta.status}). Reinicia el backend desde Kombechi-jc para cargar la ruta de edición.`);
+      throw new Error(`La API no respondió con datos (HTTP ${respuesta.status}). Revisa la dirección y que el servidor esté disponible.`);
     }
     const datos = await respuesta.json();
     if (!respuesta.ok) throw new Error(datos.error || 'No se pudo completar la solicitud.');
@@ -65,10 +69,10 @@ export function iniciarAdmin() {
   const mostrarPanel = () => { acceso.hidden = true; panel.hidden = false; };
   const renderizar = () => {
     raizProductos.render(<FilasProductos productos={productosActuales} eliminar={eliminarProducto} editar={editarProducto} />);
-    raizPedidos.render(<TarjetasPedidos pedidos={pedidosActuales} marcarListo={marcarPedidoListo} />);
+    raizPedidos.render(<TarjetasPedidos pedidos={pedidosActuales} marcarEstado={marcarEstado} />);
     document.getElementById('contador-productos').textContent = String(productosActuales.length);
     document.getElementById('contador-categorias').textContent = String(new Set(productosActuales.map((producto) => producto.categoria)).size);
-    document.getElementById('contador-solicitudes').textContent = String(pedidosActuales.length);
+    document.getElementById('contador-solicitudes').textContent = String(pedidosActuales.filter((pedido) => pedido.estado !== 'Listo').length);
   };
   async function cargarDatos() {
     try {
@@ -118,10 +122,10 @@ export function iniciarAdmin() {
     botonCancelarEdicion.hidden = true;
     estadoProducto.textContent = '';
   }
-  async function marcarPedidoListo(id) {
+  async function marcarEstado(id, estado) {
     try {
-      await api(`/api/pedidos/${id}/listo`, { method: 'PATCH' });
-      pedidosActuales = pedidosActuales.filter((pedido) => pedido._id !== id);
+      const resultado = await api(`/api/pedidos/${id}`, { method: 'PATCH', body: JSON.stringify({ estado }) });
+      pedidosActuales = pedidosActuales.map((pedido) => pedido._id === id ? resultado.pedido : pedido);
       renderizar();
     } catch (error) { estadoProducto.textContent = error.message; }
   }
@@ -131,7 +135,7 @@ export function iniciarAdmin() {
     estadoAcceso.textContent = '';
     const datos = Object.fromEntries(new FormData(formularioAcceso).entries());
     try {
-      const respuesta = await fetch('/api/admin/login', {
+      const respuesta = await fetch(`${API_URL}/api/admin/login`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos),
       });
       const resultado = await respuesta.json();

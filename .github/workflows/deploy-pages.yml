@@ -1,0 +1,46 @@
+name: Publicar en GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    environment:
+      name: github-pages
+      url: ${{ steps.publicar.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Instalar dependencias
+        run: npm ci --prefix frontend
+      - name: Construir la tienda y el panel
+        run: npm run build --prefix frontend
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+      - name: Preparar archivos publicados
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+      - name: Publicar
+        id: publicar
+        uses: actions/deploy-pages@v4

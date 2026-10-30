@@ -8,6 +8,7 @@ const pedidoSchema = new mongoose.Schema({
   productoId: { type: Number },
   cantidad: { type: Number, required: true, min: 1 },
   mensaje: { type: String, default: '', trim: true },
+  estado: { type: String, enum: ['Pendiente', 'Listo'], default: 'Pendiente' },
 }, { timestamps: true });
 
 module.exports = mongoose.models.Pedido || mongoose.model('Pedido', pedidoSchema);
